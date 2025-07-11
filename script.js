@@ -1,41 +1,75 @@
+const micBtn = document.getElementById('mic');
 const output = document.getElementById('output');
+const clock = document.getElementById('clock');
+const batteryEl = document.getElementById('battery');
+
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 const recognition = new SpeechRecognition();
+recognition.continuous = true;
 
-recognition.continuous = true; // keep listening
-recognition.interimResults = false;
+let isListening = false;
 
-let isAwaitingCommand = false;
+// Update clock every second
+setInterval(() => {
+  const now = new Date();
+  const time = now.toLocaleTimeString();
+  clock.textContent = `Current Time: ${time}`;
+}, 1000);
 
-recognition.onstart = () => {
-  output.innerHTML += "<br>Listening for wake word...";
-};
-
-recognition.onresult = (event) => {
-  const transcript = event.results[event.results.length - 1][0].transcript.toLowerCase().trim();
-  output.innerHTML += "<br>You said: " + transcript;
-
-  if (!isAwaitingCommand) {
-    if (transcript.includes("jarvis")) {
-      output.innerHTML += "<br>Wake word detected! Listening for command...";
-      isAwaitingCommand = true;
+// Get battery status
+if (navigator.getBattery) {
+  navigator.getBattery().then(battery => {
+    function updateBattery() {
+      const level = Math.round(battery.level * 100);
+      batteryEl.textContent = `Battery: ${level}%`;
+      speak(`Battery level is ${level} percent`);
     }
-  } else {
-    reply(transcript);
-    isAwaitingCommand = false;
-  }
-};
+    updateBattery();
+    battery.addEventListener('levelchange', updateBattery);
+  });
+} else {
+  batteryEl.textContent = "Battery info not supported";
+}
 
-recognition.onerror = (event) => {
-  console.error("Recognition error:", event.error);
-};
+// Load Google Map with radar style
+function initMap(lat, lng) {
+  const map = new google.maps.Map(document.getElementById("map"), {
+    center: { lat, lng },
+    zoom: 15,
+    styles: [ { elementType: "geometry", stylers: [{ color: "#00ffff" }] } ]
+  });
+  new google.maps.Marker({ position: { lat, lng }, map });
+}
 
-recognition.onend = () => {
-  recognition.start(); // restart automatically if it stops
-};
+// Get location
+if (navigator.geolocation) {
+  navigator.geolocation.getCurrentPosition(pos => {
+    const lat = pos.coords.latitude;
+    const lng = pos.coords.longitude;
+    initMap(lat, lng);
+    output.innerHTML += "<br>JARVIS: Location acquired.";
+    speak("Location acquired");
+  }, () => {
+    output.innerHTML += "<br>JARVIS: Unable to get location.";
+    speak("Unable to get location");
+  });
+}
 
-// Start listening immediately
-recognition.start();
+// Speech synthesis
+function speak(message) {
+  const speech = new SpeechSynthesisUtterance(message);
+  speech.lang = "en-GB";
+  speech.pitch = 1;
+  speech.rate = 1;
+  window.speechSynthesis.speak(speech);
+}
+
+// Handle voice commands
+recognition.onresult = (event) => {
+  const transcript = event.results[event.results.length - 1][0].transcript.toLowerCase();
+  output.innerHTML += `<br>You said: ${transcript}`;
+  reply(transcript);
+};
 
 function reply(message) {
   let response = "";
@@ -43,26 +77,26 @@ function reply(message) {
   if (message.includes("hello")) {
     response = "Hello sir.";
   } else if (message.includes("who are you")) {
-    response = "I am J.A.R.V.I.S, at your service sir.";
+    response = "I am J.A.R.V.I.S, your AI assistant.";
   } else if (message.includes("open youtube")) {
-    response = "Opening YouTube sir.";
-    window.open("https://youtube.com", "_blank");
-  } else if (message.includes("what's the time") || message.includes("what is the time")) {
-    const now = new Date();
-    const timeString = now.toLocaleTimeString();
-    response = "The current time is " + timeString;
-  } else {
-    response = "I'm sorry sir, I didn't catch that.";
-  }
+    response = "Opening YouTube.";
 
-  output.innerHTML += "<br>Jarvis: " + response;
-  speak(response);
-}
 
-function speak(message) {
-  const speech = new SpeechSynthesisUtterance(message);
-  speech.lang = "en-GB"; // British accent
-  speech.pitch = 1;
-  speech.rate = 1;
-  window.speechSynthesis.speak(speech);
-}
+Great question!  
+✅ You **replace** your existing `index.html`, `style.css`, and `script.js` files completely with the new code I sent.  
+
+That way:
+- You’ll get the new HUD design  
+- The clock, battery, and radar-style map will appear  
+- JARVIS will speak updates too
+
+So:
+
+1. **Open** each of your three files (`index.html`, `style.css`, `script.js`)
+2. **Select all → Delete**
+3. **Paste** the new code I gave you into each file
+4. **Save**
+5. **Upload** or commit the updated files to GitHub
+6. **Redeploy** on Vercel (Vercel usually picks up changes automatically, but you can trigger a redeploy)
+
+If you'd like, I can finish the rest of the `script.js` too — just say **"yes"** and I’ll send it! 🚀
