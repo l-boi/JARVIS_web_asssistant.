@@ -7,13 +7,28 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>J.A.R.V.I.S Web Assistant</h1>
-  <button id="mic">🎤 Start Listening</button>
-  <div id="output"></div>
-  <div id="clock"></div>
-<div id="battery"></div>
-<div id="map"></div>
-  
-  <script src="script.js"></script>
-</body>
-</html
+  <div class="hud">
+    <h1 class="hud-title">J.A.R.V.I.S Web Assistant</h1>
+    
+    <div class="hud-row">
+      <div class="hud-section">
+        <h2>Clock</h2>
+        <div id="clock">Loading time...</div>
+      </div>
+      
+      <div class="hud-section">
+        <h2>Battery</h2>
+        <div id="battery">Loading battery...</div>
+      </div>
+      
+      <div class="hud-section">
+        <h2>Location</h2>
+        <div id="map">Loading location...</div>
+      </div>
+    </div>
+    
+    <div class="hud-output">
+      <button id="mic">🎤 Start Listening</button>
+      <div id="output"></div>
+    </div>
+  </
