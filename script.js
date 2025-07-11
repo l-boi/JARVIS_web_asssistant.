@@ -31,7 +31,7 @@ if (navigator.getBattery) {
   batteryEl.textContent = "Battery info not supported";
 }
 
-// Load Google Map with radar style
+// Load Google Map
 function initMap(lat, lng) {
   const map = new google.maps.Map(document.getElementById("map"), {
     center: { lat, lng },
@@ -48,10 +48,10 @@ if (navigator.geolocation) {
     const lng = pos.coords.longitude;
     initMap(lat, lng);
     output.innerHTML += "<br>JARVIS: Location acquired.";
-    speak("Location acquired");
+    speak("Location acquired.");
   }, () => {
     output.innerHTML += "<br>JARVIS: Unable to get location.";
-    speak("Unable to get location");
+    speak("Unable to get location.");
   });
 }
 
@@ -64,7 +64,7 @@ function speak(message) {
   window.speechSynthesis.speak(speech);
 }
 
-// Handle voice commands
+// Voice commands
 recognition.onresult = (event) => {
   const transcript = event.results[event.results.length - 1][0].transcript.toLowerCase();
   output.innerHTML += `<br>You said: ${transcript}`;
@@ -80,23 +80,28 @@ function reply(message) {
     response = "I am J.A.R.V.I.S, your AI assistant.";
   } else if (message.includes("open youtube")) {
     response = "Opening YouTube.";
+    window.open("https://youtube.com", "_blank");
+  } else if (message.includes("what's the time") || message.includes("what is the time")) {
+    const now = new Date();
+    const timeString = now.toLocaleTimeString();
+    response = `The current time is ${timeString}`;
+  } else {
+    response = "I'm sorry sir, I didn't catch that.";
+  }
 
+  output.innerHTML += `<br>JARVIS: ${response}`;
+  speak(response);
+}
 
-Great question!  
-✅ You **replace** your existing `index.html`, `style.css`, and `script.js` files completely with the new code I sent.  
-
-That way:
-- You’ll get the new HUD design  
-- The clock, battery, and radar-style map will appear  
-- JARVIS will speak updates too
-
-So:
-
-1. **Open** each of your three files (`index.html`, `style.css`, `script.js`)
-2. **Select all → Delete**
-3. **Paste** the new code I gave you into each file
-4. **Save**
-5. **Upload** or commit the updated files to GitHub
-6. **Redeploy** on Vercel (Vercel usually picks up changes automatically, but you can trigger a redeploy)
-
-If you'd like, I can finish the rest of the `script.js` too — just say **"yes"** and I’ll send it! 🚀
+// Start/stop listening on button click
+micBtn.addEventListener('click', () => {
+  if (!isListening) {
+    recognition.start();
+    isListening = true;
+    micBtn.textContent = "🎤 Stop Listening";
+  } else {
+    recognition.stop();
+    isListening = false;
+    micBtn.textContent = "🎤 Start Listening";
+  }
+});
