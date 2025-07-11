@@ -5,41 +5,45 @@ const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecogni
 const recognition = new SpeechRecognition();
 
 recognition.onstart = () => {
-  output.innerHTML = "Listening...";
+    output.innerHTML = "Listening...";
 };
 
 recognition.onresult = (event) => {
-  const transcript = event.results[0][0].transcript.toLowerCase();
-  output.innerHTML = "You said: " + transcript;
-  reply(transcript);
+    const transcript = event.results[0][0].transcript.toLowerCase();
+    output.innerHTML = "You said: " + transcript;
+    reply(transcript);
 };
 
 micBtn.addEventListener('click', () => {
-  recognition.start();
+    recognition.start();
 });
 
 function reply(message) {
-  let response = "";
+    let response = "";
 
-  if (message.includes("hello")) {
-    response = "Hello sir.";
-  } else if (message.includes("who are you")) {
-    response = "I am J.A.R.V.I.S, at your service sir.";
-  } else if (message.includes("open youtube")) {
-    response = "Opening YouTube sir.";
-    window.open("https://youtube.com", "_blank");
-  } else {
-    response = "I'm sorry sir, I didn't catch that.";
-  }
+    if (message.includes("hello")) {
+        response = "Hello sir.";
+    } else if (message.includes("who are you")) {
+        response = "I am J.A.R.V.I.S, at your service sir.";
+    } else if (message.includes("open youtube")) {
+        response = "Opening YouTube sir.";
+        window.open("https://youtube.com", "_blank");
+    } else if (message.includes("what's the time") || message.includes("what is the time")) {
+        const now = new Date();
+        const timeString = now.toLocaleTimeString();
+        response = "The current time is " + timeString;
+    } else {
+        response = "I'm sorry sir, I didn't catch that.";
+    }
 
-  output.innerHTML += "<br>Jarvis: " + response;
-  speak(response);
+    output.innerHTML += "<br>Jarvis: " + response;
+    speak(response); // keep this to speak out loud
 }
 
 function speak(message) {
-  const speech = new SpeechSynthesisUtterance(message);
-  speech.lang = "en-GB"; // British voice
-  speech.pitch = 1;
-  speech.rate = 1;
-  window.speechSynthesis.speak(speech);
+    const speech = new SpeechSynthesisUtterance(message);
+    speech.lang = "en-GB"; // British voice
+    speech.pitch = 1;
+    speech.rate = 1;
+    window.speechSynthesis.speak(speech);
 }
