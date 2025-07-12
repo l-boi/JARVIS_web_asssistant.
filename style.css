@@ -1,0 +1,19 @@
+body {
+  background: radial-gradient(circle at center, #001f1f, #000);
+  color: cyan;
+  font-family: monospace;
+  text-align: center;
+  padding: 20px;
+}
+button {
+  background: #00cccc;
+  color: #000;
+  border: none;
+  padding: 10px 20px;
+  margin-top: 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+#output {
+  margin-top: 20px;
+}
