@@ -1,0 +1,33 @@
+
+body {
+    background: radial-gradient(circle at center, #001f1f, #000);
+    color: cyan;
+    font-family: monospace;
+    text-align: center;
+}
+#parts-toolbar button {
+    margin: 5px;
+    background: teal;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+#design-area {
+    width: 90%;
+    height: 500px;
+    border: 2px solid cyan;
+    margin: 20px auto;
+    position: relative;
+    background: rgba(0,0,0,0.3);
+}
+.part {
+    width: 100px;
+    position: absolute;
+}
+#log {
+    margin-top: 10px;
+    font-size: 14px;
+    color: lime;
+}
